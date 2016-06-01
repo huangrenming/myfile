@@ -1,0 +1,45 @@
+/**
+*/
+function onLoad() {
+            if (typeof(Storage) == "undefined") {
+                alert("Sorry!!你的浏览器不支持Web Storage");
+            } else {
+                btn_save.addEventListener("click", saveToLocalStorage);
+                btn_load.addEventListener("click", loadFromLocalStorage);
+            }
+        }
+        var json = '{"name":"hrm","age":"28"}';
+
+        function saveToLocalStorage() {
+            localStorage.username = json;
+        }
+
+        function loadFromLocalStorage() {
+            var str = localStorage.username;
+            var obj = JSON.parse(str);
+            show_LocalStorage.innerHTML = obj.name + " 你好～欢迎来到～";
+        }
+}
+
+/**
+*/
+
+if(typeof(Storage)=="undefined")
+		{
+		    alert("Sorry!!你的浏览器不支持Web Storage");		
+		}else{		
+			/*判断姓名是否已存入localStorage，已存入时才执行{}内的命令*/
+			if (localStorage.username) { 
+				/*localStorage.counter数据不存在时传回undefined*/
+				if (!localStorage.counter) {  
+					localStorage.counter = 1;          /*初始值设为1*/
+				} else {
+					localStorage.counter++;      /*递增*/
+				}	
+				btn_login.style.display='none';   /*隐藏登录按钮*/
+				show_LocalStorage.innerHTML= localStorage.username+" 你好,这是你第"+localStorage.counter+"次来到网站~";
+			}
+			btn_login.addEventListener("click", login);
+			btn_send.addEventListener("click", sendok);
+			btn_logout.addEventListener("click", clearLocalStorage); 
+	}
