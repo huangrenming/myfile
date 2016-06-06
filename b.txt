@@ -1,4 +1,184 @@
-111
-22
-dev
-dev
+var data = {
+    list: [{
+        id: 1,
+        title: '基本例子1',
+        isAdmin: true,
+        votes: {'1': '200', '2': '200'}
+    },
+        {
+            id: 2,
+            title: '基本例子2',
+            isAdmin: true,
+            votes: {'1': '221', '2': '2'}
+        },
+        {
+            id: 3,
+            title: '基本例子3',
+            isAdmin: true,
+            votes: {'1': '33', '2': '100'}
+        },
+        {
+            id: 4,
+            title: '基本例子2',
+            isAdmin: true,
+            votes: {'1': '221', '2': '2'}
+        },
+        {
+            id: 5,
+            title: '基本例子3',
+            isAdmin: true,
+            votes: {'1': '33', '2': '100'}
+        }
+        ,
+        {
+            id: 6,
+            title: '基本例子3',
+            isAdmin: true,
+            votes: {'1': '33', '2': '100'}
+        },
+        {
+            id: 7,
+            title: '基本例子7',
+            isAdmin: true,
+            votes: {'1': '33', '2': '100'}
+        }]
+};
+var ext;
+
+function saveToLocalStorage(locs, data) {
+    localStorage[locs] = JSON.stringify(data);
+}
+
+function loadFromLocalStorage(locs) {
+    return JSON.parse(localStorage[locs]);
+}
+
+function extend(defaultConfig, config) {
+    var obj = {};
+    for (var attr in defaultConfig) {
+        obj[attr] = config[attr] || defaultConfig[attr];
+    }
+    return obj;
+}
+
+var storage = {};
+
+
+if (localStorage.storage) {
+    var loc = loadFromLocalStorage('storage');
+}
+
+console.log('loc>>>', loc);
+
+
+locData(data)
+
+function locData(data) {
+
+    var locStorage, uin;
+
+    if (localStorage.storage) {
+        var arr =[]
+        locStorage = loadFromLocalStorage('storage');
+
+        console.log(">>locStorage", locStorage);
+        //locStorage.list.forEach(function (item) {
+        //
+        //    console.log(">>locStorage", item);
+        //
+        //})
+        console.log(">>arr", arr);
+        data.list.forEach(function (item) {
+            var _id = item.id;
+            var _vote = item.votes;
+            console.log(">>item", item.votes, item.id);
+
+            arr.push({_id : _id,_vote:_vote})
+
+            //var arr = [1, 2];
+            //arr.forEach(function (i) {
+            //     if (parseInt(item.votes[i]) <= parseInt(locStorage[item.id][i])) {
+            //
+            //        uin = extend(item.votes, locStorage[item.id]);
+            //
+            //        if (uin) {
+            //            item.votes = uin;
+            //        }
+            //        console.log(item.votes, uin)
+            //    }else{
+            //        item.votes = data.votes;
+            //        console.log(11111111111111111111111111111111111111111);
+            //    }
+            //})
+
+
+        });
+        console.log(">>arr", arr);
+    }
+}
+
+
+function praiseBox(el) {
+    var count = '';
+    var order = '';
+    var elNode = el.nodeName;
+    count = parseInt(el.innerHTML);
+    order = el.getAttribute('order');
+    if (elNode.toLocaleLowerCase() == 'button') {
+        count++;
+        el.innerHTML = count;
+    }
+    else {
+    }
+
+    return {
+        count: count,
+        order: order
+    };
+}
+
+
+setTimeout(parentBox, 0);
+
+function parentBox() {
+
+    var boxs = document.querySelectorAll('.box');
+
+    for (var i = 0; i < boxs.length; i++) {
+
+        var vid = boxs[i].getAttribute('vaId');
+
+        boxs[i].onclick = function (e) {
+            var _this = this;
+            e = e || window.event;
+            var el = e.target || e.srcElement;
+
+            var obj = praiseBox(el);
+            var count = obj.count;
+            var order = obj.order;
+
+            _this.id = this.getAttribute('vaId').toString();
+            //console.log(">>box.id ", _this.id, count, order);
+
+            data.list.forEach(function (item) {
+
+                    storage[_this.id] = item.votes;
+                    storage[_this.id][order] = count;
+
+                    saveToLocalStorage('storage', storage);
+
+                    if (loc) {
+                        storage = loc;
+                    }
+
+            })
+
+
+        }
+    }
+}
+
+var html = template('test', data);
+document.getElementById('content').innerHTML = html;
+
+
