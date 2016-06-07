@@ -1,11 +1,10 @@
-ext = function () {
+$ = function () {
 
     var copyIsArray,
 
-        toString = Object.prototype.toString,
+            toString = Object.prototype.toString,
 
-        hasOwn = Object.prototype.hasOwnProperty;
-
+            hasOwn = Object.prototype.hasOwnProperty;
 
     class2type = {
 
@@ -27,105 +26,90 @@ ext = function () {
 
     },
 
+            type = function (obj) {
 
-        type = function (obj) {
-
-            return obj == null ? String(obj) : class2type[toString.call(obj)] || "object";
-
-        },
-
-
-        isWindow = function (obj) {
-
-            return obj && typeof obj === "object" && "setInterval" in obj;
-
-        },
-
-
-        isArray = Array.isArray || function (obj) {
-
-                return type(obj) === "array";
+                return obj == null ? String(obj) : class2type[toString.call(obj)] || "object";
 
             },
 
+            isWindow = function (obj) {
 
-        isPlainObject = function (obj) {
+                return obj && typeof obj === "object" && "setInterval" in obj;
 
-            if (!obj || type(obj) !== "object" || obj.nodeType || isWindow(obj)) {
+            },
 
-                return false;
+            isArray = Array.isArray || function (obj) {
 
-            }
+                        return type(obj) === "array";
 
+                    },
 
-            if (obj.constructor && !hasOwn.call(obj, "constructor")
+            isPlainObject = function (obj) {
 
-                && !hasOwn.call(obj.constructor.prototype, "isPrototypeOf")) {
+                if (!obj || type(obj) !== "object" || obj.nodeType || isWindow(obj)) {
 
-                return false;
+                    return false;
 
-            }
-
-
-            var key;
-
-            for (key in obj) {
-
-            }
-
-
-            return key === undefined || hasOwn.call(obj, key);
-
-        },
-
-
-        extend = function (deep, target, options) {
-
-            for (name in options) {
-
-                src = target[name];
-
-                copy = options[name];
-
-
-                if (target === copy) {
-                    continue;
                 }
 
+                if (obj.constructor && !hasOwn.call(obj, "constructor")
 
-                if (deep && copy
+                        && !hasOwn.call(obj.constructor.prototype, "isPrototypeOf")) {
 
-                    && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+                    return false;
 
-                    if (copyIsArray) {
+                }
 
-                        copyIsArray = false;
+                var key;
 
-                        clone = src && isArray(src) ? src : [];
+                for (key in obj) {
 
+                }
 
-                    } else {
+                return key === undefined || hasOwn.call(obj, key);
 
-                        clone = src && isPlainObject(src) ? src : {};
+            },
 
+            extend = function (deep, target, options) {
+
+                for (name in options) {
+
+                    src = target[name];
+
+                    copy = options[name];
+
+                    if (target === copy) {
+                        continue;
                     }
 
+                    if (deep && copy
 
-                    target[name] = extend(deep, clone, copy);
+                            && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
 
-                } else if (copy !== undefined) {
+                        if (copyIsArray) {
 
-                    target[name] = copy;
+                            copyIsArray = false;
 
+                            clone = src && isArray(src) ? src : [];
+
+                        } else {
+
+                            clone = src && isPlainObject(src) ? src : {};
+
+                        }
+
+                        target[name] = extend(deep, clone, copy);
+
+                    } else if (copy !== undefined) {
+
+                        target[name] = copy;
+
+                    }
                 }
 
-            }
+                return target;
 
-
-            return target;
-
-        };
-
+            };
 
     return {extend: extend};
 
