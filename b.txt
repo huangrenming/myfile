@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 11111
+=======
+>>>>>>> ff53a8f542b03697c9fc723678239e6a557d12d9
 var data = {
     list: [{
         id: 1,
@@ -182,3 +185,7 @@ function parentBox() {
 var html = template('test', data);
 document.getElementById('content').innerHTML = html;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ff53a8f542b03697c9fc723678239e6a557d12d9
