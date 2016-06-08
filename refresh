@@ -1,0 +1,98 @@
+(function(win, undefined){
+    'use strict';
+
+    var defaults = {
+        isBusy: false,
+        distance: 0.1,
+        immediateCheck: false,
+        callback: null,
+        selector:null
+    };
+
+    var PageScroll = function(options) {
+
+        this.params = $.extend({}, defaults, options || {});
+
+        this.params.container = document.querySelector(this.params.selector);
+
+        if (!this.params.container) {
+            return;
+        }
+
+        this.params.callback = this.throttle(this.params.callback, 600);
+
+        win.addEventListener('scroll', this.handler.bind(this), false);
+
+        return this;
+    };
+
+    PageScroll.prototype = {
+        handler: function() {
+            var eleBottom,
+                remaining,
+                shouldScroll,
+                winBottom,
+                winH = window.innerHeight,
+                scrollTop = window.document.body.scrollTop,
+                elem = this.params.container,
+                elemH = elem.clientHeight,
+                elemTop = 0;
+
+            while (elem.tagName.toUpperCase() !== 'BODY') {
+                elemTop += elem.offsetTop;
+                elem = elem.offsetParent;
+            }
+
+            winBottom = winH + scrollTop;
+            eleBottom = elemTop + elemH;
+            remaining = eleBottom - winBottom;
+            shouldScroll = (remaining <= winH * this.params.distance);
+
+            if (shouldScroll && !this.params.isBusy) {
+                this.params.callback();
+            } else {}
+        },
+
+        get: function(attr){
+            return this.params && this.params[attr];
+        },
+
+        toggle: function(){
+            this.params.isBusy = !this.params.isBusy;
+        },
+        throttle: function (fn, delay){
+            var timer = null;
+            return function(){
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function(){
+                    fn.apply(context, args);
+                }, delay);
+            };
+        }
+    };
+
+    function pageScroll(options){
+        return new PageScroll(options)
+    }
+
+    window.pageScroll = pageScroll;
+
+})(window)
+
+function loading(){
+    setTimeout(function(){
+        var wrapper =document.querySelector('#wrapper');
+        var loadRefresh =document.querySelector('.loadRefresh');
+        wrapper.removeChild(loadRefresh);
+    },800);
+    createElement();
+    function createElement(){
+        var divEl = document.createElement('div');
+        divEl.setAttribute('class', 'loadRefresh loading');
+        var wrapper =document.querySelector('#wrapper');
+        var str = '<span>正在加载 … </span><i class="icon"></i>';
+        divEl.innerHTML = str;
+        wrapper.appendChild(divEl);
+    }
+}

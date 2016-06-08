@@ -1,0 +1,102 @@
+function praiseBox(el) {
+    var count = '';
+    var order = '';
+    var elNode = el.nodeName;
+    count = parseInt(el.innerHTML);
+    order = el.getAttribute('order');
+    if (elNode.toLocaleLowerCase() == 'button') {
+        count++;
+        el.innerHTML = count;
+    }
+    else {
+    }
+
+    return {
+        count: count,
+        order: order
+    };
+}
+
+function saveToLocalStorage(locs, data) {
+    localStorage[locs] = JSON.stringify(data);
+}
+
+function loadFromLocalStorage(locs) {
+    return JSON.parse(localStorage[locs]);
+}
+
+function extend(defaultConfig, config) {
+    var obj = {};
+    for (var attr in defaultConfig) {
+        obj[attr] = config[attr] || defaultConfig[attr];
+    }
+    return obj;
+}
+
+var locObj = locData(datas);
+var data = locObj.data;
+var locData = locObj.locData;
+
+function locData(data) {
+
+    var locStorage, locData;
+
+    if (localStorage.storage) {
+        locStorage = loadFromLocalStorage('storage');
+    }
+
+    if (locStorage) {
+        locData = extend(data, locStorage);
+    } else {
+        locData = data;
+    }
+
+    return {
+        data: data,
+        locData: locData
+    };
+}
+
+
+setTimeout(parentBox, 0);
+
+function parentBox() {
+
+    var boxs = document.querySelectorAll('.box');
+
+    for (var i = 0; i < boxs.length; i++) {
+
+        boxs[i].onclick = function (e) {
+            var _this = this;
+            e = e || window.event;
+            var el = e.target || e.srcElement;
+
+            var obj = praiseBox(el);
+            var count = obj.count;
+            var order = obj.order;
+
+            _this.id = this.getAttribute('vaId');
+            //console.log(">>box.id ", _this.id, count, order);
+
+            data.list.forEach(function (item) {
+
+                if (item.id == _this.id && order) {
+
+                    if (count > item.votes[order]) {
+                        item.votes[order] = count;
+                    }
+
+                    //console.log("order:"+order, "count:"+count, item.votes,locvotes);
+                    console.log(11111)
+                    saveToLocalStorage('storage', data);
+
+                    if (locData) {
+                        data = locData;
+                    }
+
+                } else {};
+
+            })
+        }
+    }
+}
