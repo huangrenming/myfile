@@ -12,3 +12,16 @@
     };
     return toggler;
   };
+
+function getParents(target){
+            var arr = [];
+            var targetP = target;
+            while(targetP){
+                targetP = targetP.parentNode;
+                arr.push(targetP);
+
+                if(targetP.className == 'box'){
+                    return arr;
+                }
+            }
+        };
